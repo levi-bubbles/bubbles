@@ -184,7 +184,58 @@ var agecatCenters = { // Center locations of the bubbles.
     'Stimmt eher nicht': 70, 
     'Stimmt nicht': 70
   };  
+  // Sechster Button: Geldentschädigung
     
+    
+  var moneyCenters = { // Center locations of the bubbles. 
+    '0': { x: 220, y: height / 2  },
+    '1': { x: 420, y: height / 2  },
+    '2': { x: 600, y: height / 2  },
+    '3': { x: 770, y: height / 2  }
+  
+  };
+
+  var moneyTitleX = {  // X locations of the year titles.
+    '"Geldentschädigung für eine Woche Geräteverzicht"': 500,
+    'Ohne Entschädigung': 100,
+    '5CHF-50CHF': 350, 
+    '50CHF-100CHF': 650, 
+    'Mehr als 100CHF': 900
+  };
+    
+  var moneyTitleY = {  // Y locations of the year titles.
+    '"Geldentschädigung für eine Woche Geräteverzicht"': 35, 
+    'Ohne Entschädigung': 70,
+    '5CHF-50CHF': 70, 
+    '50CHF-100CHF': 70, 
+    'Mehr als 100CHF': 70
+  };  
+     // Siebter Button: Griffbereit
+    
+    
+  var sleepCenters = { // Center locations of the bubbles. 
+    '1': { x: 220, y: height / 2  },
+    '2': { x: 420, y: height / 2  },
+    '3': { x: 600, y: height / 2  },
+    '4': { x: 770, y: height / 2  }
+  
+  };
+
+  var sleepTitleX = {  // X locations of the year titles.
+    '"Ich habe mein Handy beim Schlafen in Griffweite."': 500,
+    'Ja': 100,
+    'Eher ja': 350, 
+    'Eher nein': 650, 
+    'Nein': 900
+  };
+    
+  var sleepTitleY = {  // Y locations of the year titles.
+    '"Ich habe mein Handy beim Schlafen in Griffweite."': 35, 
+    'Ja': 70,
+    'Eher ja': 70, 
+    'Eher nein': 70, 
+    'Nein': 70
+  };   
     
     
 //* ------------------------------------------------------------------
@@ -255,7 +306,11 @@ var agecatCenters = { // Center locations of the bubbles.
         concern: d.sorgenkat,  
         concerntext: d.sorgen,
         
-         
+        money: d.geldeinewochekat,
+        moneytext: d.geldeinewoche,
+        
+        sleep: d.smartphoneschlafenkat,
+        sleeptext: d.smartphoneschlafen,
         
         x: Math.random() * 900,
         y: Math.random() * 800
@@ -353,6 +408,8 @@ var agecatCenters = { // Center locations of the bubbles.
     hideSex();
     hideScreentime();
     hideConcern();  
+    hideMoney();
+    hideSleep();
     
     force.on('tick', function (e) {
       bubbles.each(moveToCenter(e.alpha))
@@ -395,6 +452,8 @@ Die Positionierung basiert auf dem alpha Parameter des force layouts und wird kl
     hideSex();
     hideConcern();
     hideScreentime();
+    hideMoney();
+    hideSleep();
 
     force.on('tick', function (e) {
       bubbles.each(moveToYear(e.alpha))
@@ -443,6 +502,8 @@ function moveToYear(alpha) {
     hideSex();
     hideConcern();
     hideScreentime();
+    hideMoney();
+    hideSleep();
 
     force.on('tick', function (e) {
       bubbles.each(moveToAgecat(e.alpha))
@@ -491,6 +552,8 @@ function moveToAgecat(alpha) {
     hideAgecat();
     hideConcern();
     hideScreentime();
+    hideMoney();
+    hideSleep();
 
     force.on('tick', function (e) {
       bubbles.each(moveToSex(e.alpha))
@@ -539,7 +602,9 @@ function moveToAgecat(alpha) {
     hideSex();
     hideAgecat();
     hideConcern();
-
+    hideMoney();
+    hideSleep();
+      
     force.on('tick', function (e) {
       bubbles.each(moveToScreentime(e.alpha))
         .attr('cx', function (d) { return d.x; })
@@ -588,7 +653,9 @@ function moveToAgecat(alpha) {
     hideSex();
     hideAgecat();
     hideScreentime();
-
+    hideMoney();
+    hideSleep();
+      
     force.on('tick', function (e) {
       bubbles.each(moveToConcern(e.alpha))
         .attr('cx', function (d) { return d.x; })
@@ -623,7 +690,104 @@ function moveToAgecat(alpha) {
       .attr('text-anchor', 'middle')
       .text(function (d) { return d; });
     }
+//* ------------------------------------------------------------------
+//
+// Geldentschädigung
+//
+// -----------------------------------------------------------------*/
+    
+  function splitBubblesintoMoney() {
+    showMoney();
+    hideYear();
+    hideSex();
+    hideAgecat();
+    hideScreentime();
+    hideConcern();
+    hideSleep();
+      
+    force.on('tick', function (e) {
+      bubbles.each(moveToMoney(e.alpha))
+        .attr('cx', function (d) { return d.x; })
+        .attr('cy', function (d) { return d.y; });
+    });
 
+    force.start();
+  }
+
+  function moveToMoney(alpha) {
+    return function (d) {
+      var target = moneyCenters[d.money];
+      d.x = d.x + (target.x - d.x) * damper * alpha * 1.1;
+      d.y = d.y + (target.y - d.y) * damper * alpha * 1.1;
+    };
+  }
+
+  function hideMoney() {
+    svg.selectAll('.money').remove();
+  }
+
+  function showMoney() {
+
+    var moneyData = d3.keys(moneyTitleX);
+    var money = svg.selectAll('.money')
+      .data(moneyData);
+
+    money.enter().append('text')
+      .attr('class', 'money')
+      .attr('x', function (d) { return moneyTitleX[d]; })
+      .attr('y', function (d) { return moneyTitleY[d]; })
+      .attr('text-anchor', 'middle')
+      .text(function (d) { return d; });
+    }
+//* ------------------------------------------------------------------
+//
+// Griffbereit
+//
+// -----------------------------------------------------------------*/
+    
+  function splitBubblesintoSleep() {
+    showSleep();
+    hideYear();
+    hideSex();
+    hideAgecat();
+    hideScreentime();
+    hideConcern();
+    hideMoney();
+      
+    force.on('tick', function (e) {
+      bubbles.each(moveToSleep(e.alpha))
+        .attr('cx', function (d) { return d.x; })
+        .attr('cy', function (d) { return d.y; });
+    });
+
+    force.start();
+  }
+
+  function moveToSleep(alpha) {
+    return function (d) {
+      var target = sleepCenters[d.sleep];
+      d.x = d.x + (target.x - d.x) * damper * alpha * 1.1;
+      d.y = d.y + (target.y - d.y) * damper * alpha * 1.1;
+    };
+  }
+
+  function hideSleep() {
+    svg.selectAll('.sleep').remove();
+  }
+
+  function showSleep() {
+
+    var sleepData = d3.keys(sleepTitleX);
+    var sleep = svg.selectAll('.sleep')
+      .data(sleepData);
+
+    sleep.enter().append('text')
+      .attr('class', 'sleep')
+      .attr('x', function (d) { return sleepTitleX[d]; })
+      .attr('y', function (d) { return sleepTitleY[d]; })
+      .attr('text-anchor', 'middle')
+      .text(function (d) { return d; });
+    }  
     
 //* ------------------------------------------------------------------
 //
@@ -652,6 +816,10 @@ function moveToAgecat(alpha) {
       splitBubblesintoConcern();
     } else if (displayName === 'screentime') {
       splitBubblesintoScreentime();
+    } else if (displayName === 'money') {
+      splitBubblesintoMoney();
+    } else if (displayName === 'sleep') {
+      splitBubblesintoSleep();
     } else {
       groupBubbles();
     }
@@ -700,6 +868,12 @@ function moveToAgecat(alpha) {
                   '</span><br/>' +
                   '<span class="name">"Ich mache mir Sorgen um meine Daten": </span><span class="value">' +
                   d.concerntext +
+                  '</span><br/>' +
+                  '<span class="name">"Geldentschädigung für eine Woche Geräteverzicht": </span><span class="value">' +
+                  d.moneytext +
+                  '</span><br/>' +
+                  '<span class="name">"Ich habe mein Handy beim Schlafen in Griffweite": </span><span class="value">' +
+                  d.sleeptext +
                   '</span><br/>' +
                   '<span class="name">"Umfragejahr": </span><span class="value">' +
                   d.year +
