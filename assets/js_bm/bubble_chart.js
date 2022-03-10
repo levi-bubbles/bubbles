@@ -214,27 +214,27 @@ var agecatCenters = { // Center locations of the bubbles.
     
     
   var sleepCenters = { // Center locations of the bubbles. 
-    '1': { x: 220, y: height / 2  },
-    '2': { x: 420, y: height / 2  },
-    '3': { x: 600, y: height / 2  },
-    '4': { x: 770, y: height / 2  }
+    '4': { x: 220, y: height / 2  },
+    '3': { x: 420, y: height / 2  },
+    '2': { x: 600, y: height / 2  },
+    '1': { x: 770, y: height / 2  }
   
   };
 
   var sleepTitleX = {  // X locations of the year titles.
     '"Ich habe mein Handy beim Schlafen in Griffweite."': 500,
-    'Ja': 100,
-    'Eher ja': 350, 
-    'Eher nein': 650, 
-    'Nein': 900
+    'Nein': 100,
+    'Eher nein': 350, 
+    'Eher ja': 580, 
+    'Ja': 850,
   };
     
   var sleepTitleY = {  // Y locations of the year titles.
     '"Ich habe mein Handy beim Schlafen in Griffweite."': 35, 
-    'Ja': 70,
-    'Eher ja': 70, 
+    'Nein': 70,
     'Eher nein': 70, 
-    'Nein': 70
+    'Eher ja': 70, 
+    'Ja': 70
   };   
     
     
@@ -850,7 +850,7 @@ function moveToAgecat(alpha) {
 
   var fillColor = d3.scale.ordinal()
     .domain(['1','2','3', '4','5','6'])
-    .range(['#F7CAD0', '#ADE8F4', '#48CAE4', '#0096C7','#023E8A','#03045E']);
+    .range(['#F7CAD0', '#FFFF24', '#FDC700', '#FC7B28','#FA442A','#A90412']);
 
   /* Tooltip-Funktion*/
   function showDetail(d) {
